@@ -32,13 +32,13 @@ module RoleBasedSequrity
             user.xpath_select_elements('Roles/Role').map { |role| role.Value } :
             []
     end
-	
-	def current_user_roles
-		user_roles(current_user)
-	end
+    
+    def current_user_roles
+        user_roles(current_user)
+    end
     
     def has_role(role)
-		current_user_roles.include?('admin') || user_roles(current_user).include?(role)
+        current_user_roles.include?('admin') || user_roles(current_user).include?(role)
     end
     
     def require_role(role)
@@ -69,10 +69,10 @@ module RoleBasedSequrity
             ask_password( username, prev_url )
         end        
     end  
-	
+    
     def return_to_url( prev_url) 
         ( prev_url && prev_url != '' ) ? prev_url : base_url
-    end	
+    end    
     
     def log_out
         sessions.clear

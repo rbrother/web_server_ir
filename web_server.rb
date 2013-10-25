@@ -18,7 +18,8 @@ module Brotherus
         def initialize(opt = {})
             @port = opt[:port] || 8082
             @app_name = opt[:app_name] || 'app'
-            @app_dir = opt[:app_dir] || Pathname.new(Dir.pwd)
+            @app_dir = ( opt[:app_dir] || Pathname.new(Dir.pwd) ).expand_path
+            puts "app_dir: #{app_dir}"
             @listeners = []
             puts "Web Server by Robert Brotherus"
             puts "Adding listener for port #{port}"
@@ -62,14 +63,16 @@ module Brotherus
                 i = my_socket.Receive( @request_bytes )                
                 bytes = @request_bytes.take(i).to_a
                 puts "#{i} bytes read"
-                @request = Request.new( bytes.pack 'C*' )
+                @request = Request.new( my_socket.RemoteEndPoint, bytes.pack('C*') )
                 puts "Raw request:"
-                puts request.lines                    
-                puts "\nrequest_type: #{request.type}"
+                puts request.lines.map { |line| "    " + line }                    
+                puts "\nrequest.type: #{request.type}"
+                puts "request.page: #{request.page}"
                 if request.app == 'favicon.ico' # special request for icon from browser
                     puts "icon request -> ignore"
                     return NoReplyResponse.new 
                 end
+                puts "request headers:"
                 request.print_headers                
                 response = get_response()
                 response.socket = my_socket

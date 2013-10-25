@@ -4,13 +4,18 @@ module Brotherus
 
     class Request
         
-        def initialize(raw_request_string)
+        def initialize( ip, raw_request_string )
             # the request string encoding does not matter since all
             # 'difficult' chars in parameters are anyway URL-escaped at this point.
             # We will deal with that later
             @raw_request = raw_request_string
+			@ip = ip
         end
     
+	    def ip
+			@ip
+		end
+	
         def raw
             @raw_request
         end
@@ -52,7 +57,7 @@ module Brotherus
         end
                 
         def parameters
-            parse_parameters( type == 'GET' ? get_path_parts.last : lines.last )
+            @parameters ||= parse_parameters( type == 'GET' ? get_path_parts.last : lines.last )
         end
         
         def app
@@ -74,11 +79,11 @@ module Brotherus
         end
         
         def post_path_parts # app, page
-            path.match(/^\/([\w\.]+)(?:\/([\w\.]+)?)?$/).to_a[1..-1] || []
+            path.match(/^\/([\w\.-]+)(?:\/([\w\.-]+)?)?$/).to_a[1..-1] || []
         end
         
         def get_path_parts # app, page, parameters
-            path.match(/^\/([\w\.]+)(?:\/(?:([\w\.]+)(?:\?(.+))?)?)?$/).to_a[1..-1] || []
+            path.match(/^\/([\w\.-]+)(?:\/(?:([\w\.-]+)(?:\?(.+))?)?)?$/).to_a[1..-1] || []
         end    
     
         def parse_parameters( parameters_text )
@@ -93,7 +98,7 @@ module Brotherus
 
         def decode_par( s )
             s.sub!('%A0+',' ') # U+00A0 (NO-BREAK SPACE) seems to create problems when converting to dotnet string, so remove
-            CGI.unescape(s)
+            CGI.unescape(s).encode("iso-8859-1") # Ruby 1.9 default encoding is "ASCII-8BIT". This marks the text as iso-8859-1 encoded (ensure that you use iso-8859-1 encoding in html docs)
         end        
     
     end

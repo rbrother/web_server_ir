@@ -44,10 +44,10 @@ module Brotherus
             settings
         end
         
-        def transform( par_dict, xmlFile, xsltFile )
-            puts "transforming with #{xsltFile}"
-            transformer = transformer(xsltFile)
-            xml = @builder.Build( xmlFile.to_uri )
+        def transform( par_dict, xml_file, xslt_file )
+            puts "transforming with #{xslt_file}"
+            transformer = transformer(xslt_file)
+            xml = @builder.Build( xml_file.to_uri )
             transformer.InitialContextNode = xml
             sb = System::IO::StringWriter.new()
             xmlWriter = System::Xml::XmlWriter.Create( sb, xml_writer_settings )

@@ -68,5 +68,21 @@ module Brotherus
         end
         
     end 
+    
+    class PdfResponse < Response
+    
+        def initialize(filename)
+            @filename = filename
+        end
+    
+        def send_to_browser
+            data = IO.read(@filename)
+            send_string "HTTP/1.0 200 OK\n" +
+                "Content-Type: application/pdf;" +
+                "Content-Length: #{data.length}\n\n"
+            send_bytes( data )
+        end
 
+    end
+ 
 end
