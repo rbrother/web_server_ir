@@ -66,6 +66,7 @@ module Brotherus
                 @request = Request.new( my_socket.RemoteEndPoint, bytes.pack('C*') )
                 puts "Raw request:"
                 puts request.lines.map { |line| "    " + line }                    
+				return NoReplyResponse.new if request.lines.empty?
                 puts "\nrequest.type: #{request.type}"
                 puts "request.page: #{request.page}"
                 if request.app == 'favicon.ico' # special request for icon from browser
