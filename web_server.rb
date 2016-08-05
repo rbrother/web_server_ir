@@ -21,7 +21,7 @@ module Brotherus
             @app_dir = ( opt[:app_dir] || Pathname.new(Dir.pwd) ).expand_path
             puts "app_dir: #{app_dir}"
             @listeners = []
-            puts "Web Server by Robert Brotherus"
+            puts 'Web Server by Robert Brotherus'
             puts "Adding listener for port #{port}"
             my_listener = TcpListener.new( IPEndPoint.new( IPAddress.any, port ) )
             my_listener.Start()
@@ -35,7 +35,7 @@ module Brotherus
         def port; @port; end
         
         def base_url
-            "http://#{host_server}:#{port}/#{app_name}"
+            "http://#{host_server}/#{app_name}"
         end
         
         # This method Accepts new connection and
@@ -50,7 +50,7 @@ module Brotherus
         end        
         
         def get_and_process_request
-            my_socket = get_pending_listener().AcceptSocket()
+            my_socket = get_pending_listener.AcceptSocket()
             my_socket.receive_timeout = 5000 # millisecs. Prevent server being stalled on bad requests.
             puts "\n\n================== Processing Request =================="
             return unless my_socket.Connected
@@ -64,18 +64,18 @@ module Brotherus
                 bytes = @request_bytes.take(i).to_a
                 puts "#{i} bytes read"
                 @request = Request.new( my_socket.RemoteEndPoint, bytes.pack('C*') )
-                puts "Raw request:"
-                puts request.lines.map { |line| "    " + line }                    
-				return NoReplyResponse.new if request.lines.empty?
+                puts 'Raw request:'
+                puts request.lines.map { |line| '    ' + line }
+                return NoReplyResponse.new if request.lines.empty?
                 puts "\nrequest.type: #{request.type}"
                 puts "request.page: #{request.page}"
                 if request.app == 'favicon.ico' # special request for icon from browser
-                    puts "icon request -> ignore"
+                    puts 'icon request -> ignore'
                     return NoReplyResponse.new 
                 end
-                puts "request headers:"
-                request.print_headers                
-                response = get_response()
+                puts 'request headers:'
+                request.print_headers
+                response = get_response
                 response.socket = my_socket
                 response.send_to_browser
             end
