@@ -9,13 +9,13 @@ module Brotherus
             # 'difficult' chars in parameters are anyway URL-escaped at this point.
             # We will deal with that later
             @raw_request = raw_request_string
-			@ip = ip
+            @ip = ip
         end
     
-	    def ip
-			@ip
-		end
-	
+        def ip
+            @ip
+        end
+    
         def raw
             @raw_request
         end
@@ -50,6 +50,10 @@ module Brotherus
         
         def host
             headers['Host']
+        end
+
+        def forwarded_for
+            headers['X-Forwarded-For']
         end
         
         def [](par_name)

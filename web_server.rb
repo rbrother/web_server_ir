@@ -58,7 +58,6 @@ module Brotherus
                 puts "Client Connected: #{my_socket.RemoteEndPoint}"
                 purge_dead_sessions
                 puts "sessions: #{sessions.inspect}"
-                @remote_ip = my_socket.RemoteEndPoint.address.ToString()
                 @request_bytes = System::Array.of(System::Byte).new(100000)
                 i = my_socket.Receive( @request_bytes )                
                 bytes = @request_bytes.take(i).to_a
@@ -69,6 +68,7 @@ module Brotherus
                 return NoReplyResponse.new if request.lines.empty?
                 puts "\nrequest.type: #{request.type}"
                 puts "request.page: #{request.page}"
+                @remote_ip = request.forwarded_for || my_socket.RemoteEndPoint.address.ToString()
                 if request.app == 'favicon.ico' # special request for icon from browser
                     puts 'icon request -> ignore'
                     return NoReplyResponse.new 

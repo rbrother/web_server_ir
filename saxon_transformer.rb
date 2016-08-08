@@ -39,7 +39,7 @@ module Brotherus
         end
         
         def xml_writer_settings
-            settings = System::Xml::XmlWriterSettings.new()
+            settings = System::Xml::XmlWriterSettings.new
             settings.OmitXmlDeclaration = true
             settings
         end
@@ -49,12 +49,12 @@ module Brotherus
             transformer = transformer(xslt_file)
             xml = @builder.Build( xml_file.to_uri )
             transformer.InitialContextNode = xml
-            sb = System::IO::StringWriter.new()
-            xmlWriter = System::Xml::XmlWriter.Create( sb, xml_writer_settings )
+            sb = System::IO::StringWriter.new
+            xml_writer = System::Xml::XmlWriter.Create( sb, xml_writer_settings )
             par_dict.each_pair do | par_name, value |
                 transformer.SetParameter( par_name.to_s.to_qname, value.to_s.to_xdm )
             end
-            transformer.Run( TextWriterDestination.new( xmlWriter ) )
+            transformer.Run( TextWriterDestination.new( xml_writer ) )
             sb.ToString()
         end
         

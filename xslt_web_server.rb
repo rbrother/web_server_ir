@@ -45,7 +45,7 @@ class XsltWebServer < WebServer
     end
         
     def xml_file
-        raise "inherited class must define full path to xml data file"
+        raise 'inherited class must define full path to xml data file'
     end
      
     def get_response
@@ -53,7 +53,7 @@ class XsltWebServer < WebServer
             merge( { :baseURL => base_url } ).
             merge(additional_xslt_parameters).
             merge(session_xslt_params)
-        puts "xslt_parameters:"
+        puts 'xslt_parameters:'
         xslt_parameters.each { |key,value| puts "    #{key}: #{value}" }
         catch(:response) do # allow exceptional responses be thrown from deeper
             if request.page =~ /^askPassword/i
@@ -67,10 +67,10 @@ class XsltWebServer < WebServer
             elsif request.page =~ /^(.+)-pdf$/
                 make_pdf($1, xslt_parameters)
             elsif action = page_action(request.page)
-                check_permissions_for_editing()
+                check_permissions_for_editing
                 action.new(xml_file, request, session, self).run
             else
-                check_permissions_for_viewing()
+                check_permissions_for_viewing
                 HtmlResponse.new( transformer.transform( xslt_parameters, xml_file, xslt_file(xslt) ) )
             end        
         end
@@ -110,12 +110,12 @@ class XsltWebServer < WebServer
     end
     
     # Override this if special roles are required
-    def check_permissions_for_editing()
+    def check_permissions_for_editing
         require_role 'editor' # all actions modify db
     end
     
     # Override this if special roles are required
-    def check_permissions_for_viewing()
+    def check_permissions_for_viewing
         require_role 'viewer'
     end
 
