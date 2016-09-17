@@ -51,8 +51,10 @@ module Brotherus
             transformer.InitialContextNode = xml
             sb = System::IO::StringWriter.new
             xml_writer = System::Xml::XmlWriter.Create( sb, xml_writer_settings )
+			puts 'Parameters:'
             par_dict.each_pair do | par_name, value |
                 transformer.SetParameter( par_name.to_s.to_qname, value.to_s.to_xdm )
+				puts "- #{par_name.to_s} = #{value.to_s}"
             end
             transformer.Run( TextWriterDestination.new( xml_writer ) )
             sb.ToString()
