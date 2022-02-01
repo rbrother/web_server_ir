@@ -102,7 +102,7 @@ module Brotherus
 
         def decode_par( s )
             s.sub!('%A0+',' ') # U+00A0 (NO-BREAK SPACE) seems to create problems when converting to dotnet string, so remove
-            CGI.unescape(s).encode("iso-8859-1") # Ruby 1.9 default encoding is "ASCII-8BIT". This marks the text as iso-8859-1 encoded (ensure that you use iso-8859-1 encoding in html docs)
+            CGI.unescape(s).encode("UTF-8") # Ruby 1.9 default encoding is "ASCII-8BIT". This marks the text as UTF-8 encoded (ensure that you use UTF-8 encoding in html docs)
         end        
     
     end

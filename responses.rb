@@ -4,11 +4,7 @@ module Brotherus
 
     class Response  
     
-        # Wikipedia: The encoding Windows-1252 is a superset of ISO 8859-1, but differs 
-        # from the IANA's ISO-8859-1 by using displayable characters rather than control 
-        # characters in the 0x80 to 0x9F range. It is known to Windows by the code page 
-        # number 1252, and by the IANA-approved name "windows-1252".
-        ISO8859 = System::Text::Encoding.GetEncoding("ISO-8859-1")    
+        UTF8 = System::Text::Encoding.GetEncoding("UTF-8")    
     
         attr_accessor :socket
         
@@ -26,7 +22,7 @@ module Brotherus
         end
         
         def send_string(string)
-            send_bytes( string.to_bytes(ISO8859) )
+            send_bytes( string.to_bytes(UTF8) )
         end
         
     end    
@@ -39,9 +35,9 @@ module Brotherus
         
         def send_to_browser
             send_string "HTTP/1.0 200 OK\n" +
-                "Content-Type: text/html;charset=ISO-8859-1\n" +
+                "Content-Type: text/html;charset=UTF-8\n" +
                 "Accept-Ranges: bytes\n" +
-                "Content-Length: #{@html.to_bytes(ISO8859).Length}\n\n" +
+                "Content-Length: #{@html.to_bytes(UTF8).Length}\n\n" +
                 @html
         end    
         

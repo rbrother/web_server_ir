@@ -10,7 +10,7 @@ module Html
                 <head>
                     <title>#{title}</title>
 				    #{stylesheet_link(stylesheet)}
-				    <meta http-equiv="content-type" content="application/xhtml+xml; charset=ISO-8859-1" />
+				    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
                 </head>
                 <body>
                     #{body_content}
