@@ -51,7 +51,7 @@ module Brotherus
         
         def get_and_process_request
             my_socket = get_pending_listener.AcceptSocket()
-            my_socket.receive_timeout = 5000 # millisecs. Prevent server being stalled on bad requests.
+            my_socket.receive_timeout = 20000 # millisecs. Prevent server being stalled on bad requests.
             puts "\n\n================== Processing Request =================="
             return unless my_socket.Connected
             duration = System::DateTime.measure_duration do                
